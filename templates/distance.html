@@ -1,0 +1,113 @@
+
+<html>
+  <head>
+    <title>Directions Service</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style>
+	/* 
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map. 
+ */
+#map {
+  height: 100%;
+}
+
+/* 
+ * Optional: Makes the sample page fill the window. 
+ */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  line-height: 30px;
+  padding-left: 10px;
+}
+	</style>
+  </head>
+  
+  <body>
+    <!-- Your HTML content -->
+    <div id="floating-panel">
+        <b>Start: </b>
+        <input type="text" id="start" placeholder="Enter start location">
+        <b>End: </b>
+        <input type="text" id="end" placeholder="Enter end location">
+    </div>
+    <div id="map"></div>
+
+    <!-- Your TypeScript code -->
+   <!-- TypeScript code -->
+    <script type="module">
+        function initMap(): void {
+  const directionsService = new google.maps.DirectionsService();
+  const directionsRenderer = new google.maps.DirectionsRenderer();
+  const map = new google.maps.Map(
+    document.getElementById("map") as HTMLElement,
+    {
+      zoom: 7,
+      center: { lat: 10.790483, lng: 78.704673 },
+    }
+  );
+
+  directionsRenderer.setMap(map);
+
+  const onChangeHandler = function () {
+    calculateAndDisplayRoute(directionsService, directionsRenderer);
+  };
+
+  (document.getElementById("start") as HTMLElement).addEventListener(
+    "change",
+    onChangeHandler
+  );
+  (document.getElementById("end") as HTMLElement).addEventListener(
+    "change",
+    onChangeHandler
+  );
+}
+
+function calculateAndDisplayRoute(
+  directionsService: google.maps.DirectionsService,
+  directionsRenderer: google.maps.DirectionsRenderer
+) {
+  directionsService
+    .route({
+      origin: {
+        query: (document.getElementById("start") as HTMLInputElement).value,
+      },
+      destination: {
+        query: (document.getElementById("end") as HTMLInputElement).value,
+      },
+      travelMode: google.maps.TravelMode.DRIVING,
+	  provideRouteAlternatives: true,
+    })
+    .then((response) => {
+      directionsRenderer.setDirections(response);
+    })
+    .catch((e) => window.alert("Directions request failed due to " + status));
+}
+
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
+window.initMap = initMap;
+    </script>
+
+     <script
+      src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAzfJHU7mKkVKW9nTVPymNY-0emhlP-0DQ&v=3.21.5a&libraries=drawing&signed_in=true&libraries=places,drawing"></script>
+  </body>
+</html>

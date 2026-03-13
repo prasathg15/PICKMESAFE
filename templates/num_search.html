@@ -1,0 +1,312 @@
+<html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pickme Safe</title>
+  <!-- base:css -->
+  <link rel="stylesheet" href="../static/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../static/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../static/images/favicon.png" />
+</head>
+
+<body>
+  <div class="container-scroller d-flex">
+    <!-- partial:../../partials/_sidebar.html -->
+     <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item sidebar-category">
+          <p>Voyager</p>
+          <span></span>
+        </li>
+    <li class="nav-item">
+          <a class="nav-link" href="/num_search">
+            <i class="mdi mdi-view-quilt menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+            
+          </a>
+        </li>
+       
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/num_search">
+            <i class="mdi mdi-view-headline menu-icon"></i>
+            <span class="menu-title">Vehicle details</span>
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/view_status">
+            <i class="mdi mdi-view-headline menu-icon"></i>
+            <span class="menu-title">Journey Status</span>
+          </a>
+        </li>
+		</ul>
+		</nav>
+    
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar col-lg-12 col-12 px-0 py-0 py-lg-4 d-flex flex-row">
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <div class="navbar-brand-wrapper">
+           
+          </div>
+          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, {{ username }}</h4>
+          <ul class="navbar-nav navbar-nav-right">
+            
+            <li class="nav-item dropdown mr-1">
+              <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
+                <i class="mdi mdi-calendar mx-0"></i>
+               
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                      <img src="../static/images/faces/face5.jpg" alt="image">
+                  </div>
+                 
+                </a>
+               
+               
+              </div>
+            </li>
+            
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+        <div class="navbar-menu-wrapper navbar-search-wrapper d-none d-lg-flex align-items-center">
+          <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Here..." aria-label="search" aria-describedby="search">
+              </div>
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link" href="#">
+                <img src="../static/images/faces/face5.jpg" alt="profile"/>
+               
+
+              </a>
+              
+            </li>
+            
+            <li class="nav-item"> 
+            <a href="/logout" class="dropdown-item">
+                  <i class="mdi mdi-logout text-primary"></i>
+                  Logout
+                </a>
+			</li>
+          </ul>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <div class="row">
+            
+            
+            
+            
+            
+            
+            
+   <!-- Form for uploading image -->
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Verify vehicle</h4>
+            <form class="form-inline" name="form1" method="post" action="/num_search" enctype="multipart/form-data">
+              <label class="sr-only" for="inlineFormInputName2">Name</label>
+              <input type="file" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" name="image" accept=".jpg, .jpeg, .png">
+              <div class="form-check mx-sm-2">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input" checked>
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Verify</button>
+            </form>
+          </div>
+        </div>
+      </div> <!-- End of Form div -->
+      
+     <!-- Display Vehicle Number -->
+<div class="col-md-4 offset-md-4 grid-margin stretch-card">
+  <div class="card bg-google d-flex align-items-center">
+    <div class="card-body py-5">
+      <div class="d-flex flex-row align-items-center flex-wrap justify-content-md-center justify-content-xl-start py-1">
+        <i class="mdi mdi-google-plus text-white icon-lg"></i>
+        <div class="ml-3 ml-md-0 ml-xl-3">
+          <h5 class="text-white font-weight-bold">The vehicle no:</h5>
+          <!-- Display vehicle number here -->
+          <p class="mt-2 text-white card-text">{{ license_plate }}</p>
+          <br>
+          <a href="/num_search?plate={{ license_plate }}">More details</a>
+		  
+		  <br>
+		  
+        </div>
+      </div>
+    </div>
+  </div>
+</div> <!-- End of Vehicle Number div -->
+{% if data %}
+
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 align="center" class="card-title">Vehicle details</h4><br>
+				  <div style="text-align: center;"> <!-- Center the content -->
+    <img src="static/profile/{{ data[13] }}" class="rounded-circle img-fluid" alt="Owner Image" width="100" height="100"><br>
+</div><br>
+                  <div>&nbsp;</div><p class="card-description">
+                    Owner : {{ data[3] }}
+                  </p>
+                  <div class="row">
+                    <div class="col-md-6">
+					
+                      <address>
+                        <p class="font-weight-bold">
+						{{ data[4] }}</p>
+                        <p>
+                          {{ data[2] }}
+                        </p><br>
+       <p>
+                         <a href="static/proof/{{ data[14] }}" target="_blank">Click to view proof</a>
+                        </p>
+                        
+                      </address>
+                    </div>
+                    <div class="col-md-6">
+                      <address class="text-primary">
+                        <p class="font-weight-bold">
+                          Vehicle : {{ data[6] }}
+                        </p>
+                        <p class="mb-2">
+                          Color : {{ data[7] }}
+                        </p>
+                        <p class="font-weight-bold">
+                          Fuel : {{ data[8] }}
+                        </p>
+                        <p>
+                          Seats : {{ data[10] }}
+                        </p><br>
+						
+                      </address>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <h4 align="center" class="card-title">Vehicle image</h4><br>
+                  <p class="card-description">
+                  </p>
+				   <div style="text-align: center;">
+                    <img src="static/number/{{ data[12] }}" class="img-fluid" alt="Vehicle Image Image" width="200" height="250"><br>
+					</div>
+                </div>
+				 <a href="/num_search?act=message&veh_id={{ data[0] }}" class="btn btn-primary mb-2">Start journey</a>
+              </div>
+			 
+            </div>
+			{% endif %}
+			{% if dat %}
+			<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 align="center" class="card-title">Driver details</h4><br>
+				  
+                  <div>&nbsp;</div><p class="card-description">
+                    Driver name : {{ dat[1] }}
+                  </p>
+                  <div class="row">
+                    <div class="col-md-6">
+					
+                      <address>
+					  <p class="font-weight-bold">
+						{{ dat[2] }}</p>
+                        <p class="font-weight-bold">
+						{{ dat[3] }}</p>
+                        <p>
+                          {{ dat[4] }}
+                        </p><br>
+       <p>
+                         <a href="static/driver/{{ dat[8] }}" target="_blank">Click to view proof</a>
+                        </p>
+                        
+                      </address>
+                    </div>
+                    <div class="col-md-6">
+                      <address class="text-primary">
+                        
+						
+                      </address>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                 <h4 align="center">Driver proof</h4>
+                  <p class="card-description">
+                  </p>
+				   <div style="text-align: center;">
+                    <img src="static/driver/{{ dat[8] }}" class="img-fluid" alt="Vehicle Image Image" width="200" height="250"><br>
+					</div><div>&nbsp;</div>
+                </div>
+				 
+              </div>
+			 
+            </div>
+			
+			{% endif %}
+			
+            </div>
+			
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  
+  
+  {% if st=="1" %}
+
+ <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name={{user}}&mess={{mess}}&mobile={{mobile}}" width="10" height="10" ></iframe>
+
+
+{% endif %}
+ 
+  <!-- container-scroller -->
+  <!-- base:js -->
+  <script src="../static/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+  <script src="../static/js/off-canvas.js"></script>
+  <script src="../static/js/hoverable-collapse.js"></script>
+  <script src="../static/js/template.js"></script>
+  <!-- endinject -->
+  <!-- plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- Custom js for this page-->
+  <script src="../static/js/file-upload.js"></script>
+ 
+  <!-- End custom js for this page-->
+</body>
+
+</html>
