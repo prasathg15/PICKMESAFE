@@ -32,12 +32,12 @@ def get_db_connection():
 
 mydb = mysql.connector.connect(
     host="localhost",
-    port=3306,          # add this line
     user="root",
-    password="",        # empty password
-    database="pm",
+    password="",  # Empty for XAMPP default
+    database="pickmesafe",  # Create this first
     charset="utf8"
 )
+
 print("🔥 Flask app created1")
 
 @app.route('/',methods=['POST','GET'])
