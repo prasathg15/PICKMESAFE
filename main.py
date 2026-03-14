@@ -448,58 +448,64 @@ def owner_reg():
 
     return render_template('owner_reg.html', msg=msg)
 
-
-
 @app.route('/add_driver', methods=['POST','GET'])
 def add_driver():
     if 'username' not in session or session.get('user_type') != 'owner':
-        print("Please log in as a hod to access the page.", 'danger')
+        print("Please log in as a owner to access the page.", 'danger')
         return redirect(url_for('owner_log'))
 
-    msg=""
+    msg = ""
     veh_no = session.get('veh_no')
     owner_username = session.get('username')
-    if request.method=='POST':       
-        name=request.form['name']
-        address=request.form['address']
-        mobile=request.form['mobile']
-        email=request.form['email']
-        username=request.form['username']
-        password=request.form['password']
-        
+
+    if request.method == 'POST':       
+        name = request.form['name']
+        address = request.form['address']
+        mobile = request.form['mobile']
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
 
         now = datetime.datetime.now()
-        date_join=now.strftime("%d-%m-%Y")
+        date_join = now.strftime("%d-%m-%Y")
+
         if 'profile' in request.files:
             profile = request.files['profile']
 
             if profile and allowed_file(profile.filename):
+                # Ensure the folder exists
+                profile_folder = 'D:/PickmeSafe/static/driver'
+                os.makedirs(profile_folder, exist_ok=True)
+
+                # Secure the filename
                 filename = secure_filename(profile.filename)
-                profile_path = 'D:/PickmeSafe/static/driver/' + filename
+                profile_path = os.path.join(profile_folder, filename)
+
+                # Save the file
                 profile.save(profile_path)
 
                 mycursor = mydb.cursor(buffered=True)
-                mycursor.execute("SELECT count(*) FROM pm_driver where username=%s",(username, ))
+                mycursor.execute("SELECT count(*) FROM pm_driver WHERE username=%s", (username,))
                 cnt = mycursor.fetchone()[0]
-                if cnt==0:
+
+                if cnt == 0:
                     mycursor.execute("SELECT max(id)+1 FROM pm_driver")
                     maxid = mycursor.fetchone()[0]
                     if maxid is None:
-                        maxid=1
-                    sql = "INSERT INTO pm_driver(id, name, address, mobile, email, username, password, profile, date_join, veh_no, owner_username) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)"
+                        maxid = 1
+
+                    sql = """INSERT INTO pm_driver(
+                                id, name, address, mobile, email, username, password, profile, date_join, veh_no, owner_username
+                             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     val = (maxid, name, address, mobile, email, username, password, filename, date_join, veh_no, owner_username)
-            
-            
+
                     mycursor.execute(sql, val)
                     mydb.commit()
-
-                    msg="success"
+                    msg = "success"
                 else:
-                    msg="fail"
+                    msg = "fail"
 
     return render_template('add_driver.html', msg=msg, veh_no=veh_no)
-
-
 @app.route('/veh_details',methods=['POST','GET'])
 def veh_details():
     
