@@ -410,7 +410,6 @@ def owner_log():
     return render_template('owner_log.html', msg=msg)
 
 
-
 @app.route('/owner_reg', methods=['POST','GET'])
 def owner_reg():
 
