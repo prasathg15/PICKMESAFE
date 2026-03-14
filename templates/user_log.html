@@ -1,0 +1,121 @@
+<html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pickme Safe</title>
+  <!-- base:css -->
+  <link rel="stylesheet" href="../static/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../static/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../static/images/favicon.png" />
+  <style>
+    /* Additional CSS to position the image */
+    .image-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 110%;
+      background-image: url('../static/images/auth/register-bg.png');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-scroller d-flex">
+    <div class="container-fluid page-body-wrapper full-page-wrapper d-flex">
+      <div class="content-wrapper d-flex align-items-stretch auth auth-img-bg">
+        <div class="row flex-grow">
+          <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="auth-form-transparent text-left p-3">
+              <div class="brand-logo">
+                <h2>Voyager</h2>
+              </div>
+              <h4>Login</h4>
+              <h6 class="font-weight-light">Join us today! It takes only few steps</h6>
+              <form class="pt-3" name="from1" method="post">
+                <div class="form-group">
+                  <label>Username</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control form-control-lg border-left-0" name="username" placeholder="Username">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label>Password</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                    </div>
+                    <input type="password" class="form-control form-control-lg border-left-0" name="password" id="exampleInputPassword" placeholder="Password">                        
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="form-check">
+                    <label class="form-check-label text-muted">
+                      <input type="checkbox" class="form-check-input">
+                      I agree to all Terms & Conditions
+                    </label>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../../index.html">Login</button>
+                </div>
+                <div class="text-center mt-4 font-weight-light">
+                  Create an account? <a href="/user_reg" class="text-primary">Sign up</a>
+                </div>
+              </form>
+			   {% if msg=="success" %}
+				  <span style="color:#009933">Login successful</span>
+				
+				  <script>
+//Using setTimeout to execute a function after 5 seconds.
+setTimeout(function () {
+   //Redirect with JavaScript
+   window.location.href= '/num_search';
+}, 4000);
+</script>
+
+				  {% endif %}
+				  {% if msg=="fail" %}
+				  <span style="color:#FF0000">Oops try, again!</span>
+				  {% endif %}
+            </div>
+          </div>
+          <!-- Add the image container here -->
+          <div class="col-lg-6 d-none d-lg-block">
+            <div class="image-container"></div>
+          </div>
+          <!-- End of image container -->
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- base:js -->
+  <script src="../static/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+  <script src="../static/js/off-canvas.js"></script>
+  <script src="../static/js/hoverable-collapse.js"></script>
+  <script src="../static/js/template.js"></script>
+  <!-- endinject -->
+</body>
+</html>

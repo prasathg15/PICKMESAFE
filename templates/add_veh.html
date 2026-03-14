@@ -1,0 +1,341 @@
+<html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pickme Safe</title>
+  <!-- base:css -->
+  <link rel="stylesheet" href="../static/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../static/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../static/images/favicon.png" />
+</head>
+
+<body>
+  <div class="container-scroller d-flex">
+    <!-- partial:../../partials/_sidebar.html -->
+
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item sidebar-category">
+          <p>RTO</p>
+          <span></span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_veh">
+            <i class="mdi mdi-view-quilt menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+
+          </a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="/add_veh">
+            <i class="mdi mdi-view-headline menu-icon"></i>
+            <span class="menu-title">Add Report</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/over_report">
+            <i class="mdi mdi-view-headline menu-icon"></i>
+            <span class="menu-title">Reports</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar col-lg-12 col-12 px-0 py-0 py-lg-4 d-flex flex-row">
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <div class="navbar-brand-wrapper">
+
+          </div>
+          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, </h4>
+          <ul class="navbar-nav navbar-nav-right">
+
+            <li class="nav-item dropdown mr-1">
+              <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+                id="messageDropdown" href="#" data-toggle="dropdown">
+                <i class="mdi mdi-calendar mx-0"></i>
+
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="messageDropdown">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <img src="../static/images/faces/face5.jpg" alt="image">
+                  </div>
+
+                </a>
+
+
+              </div>
+            </li>
+
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+            data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+        <div class="navbar-menu-wrapper navbar-search-wrapper d-none d-lg-flex align-items-center">
+          <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Here..." aria-label="search"
+                  aria-describedby="search">
+              </div>
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link" href="#">
+                <img src="../static/images/faces/face5.jpg" alt="profile" />
+
+              </a>
+
+            </li>
+
+            <li class="nav-item">
+              <a href="/logout" class="dropdown-item">
+                <i class="mdi mdi-logout text-primary"></i>
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+
+
+
+
+
+
+
+
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 align="center" class="card-title">Add vehicle details</h4>
+                  <div>&nbsp;</div>
+                  <form class="form-sample" name="form1" method="post" enctype="multipart/form-data">
+                    <p class="card-description">
+                      Vehicle details
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Vehicle no</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="veh_no" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Registration mobile no</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="reg_mobile" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Registration name</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="reg_name" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Registration address</label>
+                          <div class="col-sm-9">
+                            <input class="form-control" type="text" name="reg_address" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                        <div class="input-group col-xs-12">
+                          <input type="file" id="image" name="pdf[]" accept=".jpg, .png, .pdf"
+                            class="file-upload-default">
+                          <input type="text" class="form-control file-upload-info" disabled
+                            placeholder="Upload license and Aadhaar card">
+                          <div class="input-group-append">
+                            <label class="file-upload-browse btn btn-primary" for="image">Upload</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Vehicle type</label>
+                          <div class="col-sm-9">
+                            <input class="form-control" type="text" name="veh_type" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Vehicle name</label>
+                          <div class="col-sm-9">
+                            <input class="form-control" type="text" name="veh_name" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p class="card-description">
+                      Other details
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Vehicle color</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" type="text" name="veh_color" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Fuel type</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="fuel_type">
+                              <option value="petrol">Petrol</option>
+                              <option value="diesel">Diesel</option>
+                              <option value="ev">E-vehicle</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Chassis no</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" type="text" name="chassis_no" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Seating capacity(including driver)</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" type="text" name="seats" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                        <div class="input-group col-xs-12">
+                          <input type="file" id="image" name="image" accept=".jpg, .png, .jpeg"
+                            class="file-upload-default">
+                          <input type="text" class="form-control file-upload-info" disabled
+                            placeholder="Upload vehicle image">
+                          <div class="input-group-append">
+                            <label class="file-upload-browse btn btn-primary" for="image">Upload</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="card-description">
+                      Login Details
+                    </p>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Username</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="username" required>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Password</label>
+                          <div class="col-sm-9">
+                            <input type="password" class="form-control" name="password" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="reset" class="btn btn-light">Cancel</button>
+                  </form>
+                  {% if msg=="success" %}
+                  <span style="color:#009933">Vehicle Registration Successful...</span>
+
+                  {% endif %}
+                  {% if msg=="fail" %}
+                  <span style="color:#FF0000">Oops try, again!</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-sm-flex justify-content-center justify-content-sm-between">
+
+              </div>
+            </div>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- base:js -->
+  <script src="../static/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+  <script src="../static/js/off-canvas.js"></script>
+  <script src="../static/js/hoverable-collapse.js"></script>
+  <script src="../static/js/template.js"></script>
+  <!-- endinject -->
+  <!-- plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- Custom js for this page-->
+  <script src="../static/js/file-upload.js"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
