@@ -131,13 +131,14 @@ def add_veh():
 
     return render_template('add_veh.html',msg=msg)
 
-@app.route('/num_search', methods=['POST', 'GET'])
+@app.route('/num_search', methods=['GET', 'POST'])
 def num_search():
     if 'username' not in session or session.get('user_type') != 'user':
-        print("Please log in as a user to access the page.", 'danger')
         return redirect(url_for('user_log'))
 
     # Initialize variables
+    source = ""
+    destination = ""
     license_plate = ""
     st = ""
     mess = ""
@@ -149,12 +150,10 @@ def num_search():
     oname = ""
     omobile = ""
     veh_no = ""
-    source = ""
-    destination = ""
 
-    # POST handling
+
+    # ---------------- IMAGE OCR (POST ONLY) ----------------
     if request.method == 'POST':
-        # Optional file upload
         if 'image' in request.files:
             doc_file = request.files['image']
             if doc_file and doc_file.filename != '':
@@ -164,12 +163,13 @@ def num_search():
                 doc_path = os.path.join(upload_folder, doc_filename)
                 doc_file.save(doc_path)
 
-                # OCR processing
+                import cv2, pytesseract
                 img = cv2.imread(doc_path)
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
                 edged = cv2.Canny(blurred, 30, 150)
                 contours, _ = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
                 for contour in contours:
                     if cv2.contourArea(contour) > 1000:
                         x, y, w, h = cv2.boundingRect(contour)
@@ -177,106 +177,126 @@ def num_search():
                         license_plate = pytesseract.image_to_string(roi, config='--psm 6')
                         break
 
-        # Get source & destination from form (always)
-        source = request.form.get("source", "")
-        destination = request.form.get("destination", "")
-
-    # GET params
+    # ---------------- VEHICLE SEARCH ----------------
     plate = request.args.get('plate')
 
+    if plate:
+        plate = plate.strip().replace("“", "").replace("”", "")
+
     cursor = mydb.cursor(buffered=True)
+
     cursor.execute("SELECT * FROM pm_vehicle WHERE veh_no = %s", (plate,))
     data = cursor.fetchone()
-    cursor.close()
 
-    cursor = mydb.cursor(buffered=True)
     cursor.execute("SELECT * FROM pm_driver WHERE veh_no = %s", (plate,))
     dat = cursor.fetchone()
+
     cursor.close()
 
-    # Start journey action
-    act = request.args.get("act")
+    # ---------------- START JOURNEY ----------------
+    act = request.form.get("act")
+
     if act == "message":
-        veh_id = request.args.get("veh_id")
+        veh_id = request.form.get("veh_id")
+        source = request.form.get("source")
+        destination = request.form.get("destination")
         now = datetime.datetime.now()
         reg_join = now.strftime("%d-%m-%Y")
 
         cursor = mydb.cursor(buffered=True)
+
+        # Get vehicle
         cursor.execute("SELECT * FROM pm_vehicle WHERE id = %s", (veh_id,))
         aa = cursor.fetchone()
 
-        if aa:
-            veh_no = aa[1]
-            oname = aa[3]
-            omobile = aa[2]
-            oaddress = aa[4]
-            veh_type = aa[5]
-            veh_name = aa[6]
-            owner_username = aa[15]
-        else:
-            veh_no = ""
-            oname = ""
-            omobile = ""
-            oaddress = ""
-            veh_type = ""
-            veh_name = ""
-            owner_username = ""
+        if not aa:
+            return "Vehicle not found"
 
+        veh_no = aa[1]
+        oname = aa[3]
+        omobile = aa[2]
+        oaddress = aa[4]
+        veh_type = aa[5]
+        veh_name = aa[6]
+        owner_username = aa[15]
+
+        # Get driver
         cursor.execute("SELECT * FROM pm_driver WHERE veh_no = %s", (veh_no,))
         cc = cursor.fetchone()
 
-        if cc:
-            dname = cc[5]
-            dmobile = cc[3]
-            daddress = cc[2]
-        else:
-            dname = ""
-            dmobile = ""
-            daddress = ""
+        dname = cc[5] if cc else ""
+        dmobile = cc[3] if cc else ""
+        daddress = cc[2] if cc else ""
 
+        # Get user
         username = session.get('username')
         cursor.execute("SELECT * FROM pm_user WHERE username = %s", (username,))
         bb = cursor.fetchone()
+
         mobile = bb[6]
         name = bb[5]
         user = bb[1]
         umobile = bb[3]
         uaddress = bb[2]
+
         cursor.close()
 
         mess = f"Hi I'm {user}, I have journey at {veh_no}, owner is {oname}-{omobile}"
         st = "1"
 
         mycursor = mydb.cursor(buffered=True)
-        mycursor.execute("SELECT max(id)+1 FROM pm_travel")
-        maxid = mycursor.fetchone()[0]
-        if maxid is None:
-            maxid = 1
+
+
+        # ➕ ALWAYS INSERT
+        mycursor.execute("SELECT MAX(id)+1 FROM pm_travel")
+        maxid = mycursor.fetchone()[0] or 1
 
         sql = """INSERT INTO pm_travel (
-            id, veh_no, oname, omobile, oaddress, veh_type, veh_name, 
+            id, veh_no, oname, omobile, oaddress, veh_type, veh_name,
             dname, dmobile, daddress, gmobile, gname, user, uaddress, umobile,
-            username, reg_join, status, source, destination, owner_username
+            username, reg_join, status, latitude, longitude,
+            source, destination, owner_username, feedback
         ) VALUES (
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-            %s, %s, %s, %s, %s, %s
+            %s, %s, %s, %s, %s, %s, %s, %s, %s
         )"""
+
         val = (
             maxid, veh_no, oname, omobile, oaddress, veh_type, veh_name,
             dname, dmobile, daddress, mobile, name, user, uaddress, umobile,
-            username, reg_join, '1', source, destination, owner_username
+            username, reg_join, '1',
+            "", "",
+            source, destination,
+            owner_username,
+            ""
         )
+
         mycursor.execute(sql, val)
         mydb.commit()
         mycursor.close()
 
+    # ---------------- RENDER ----------------
     return render_template(
         'num_search.html',
-        license_plate=license_plate, data=data, dat=dat,
-        name=name, mobile=mobile, st=st, mess=mess, user=user,
-        veh_no=veh_no, dname=dname, dmobile=dmobile,
-        oname=oname, omobile=omobile, source=source, destination=destination
+        license_plate=license_plate,
+        data=data,
+        dat=dat,
+        name=name,
+        mobile=mobile,
+        st=st,
+        mess=mess,
+        user=user,
+        veh_no=veh_no,
+        dname=dname,
+        dmobile=dmobile,
+        oname=oname,
+        omobile=omobile,
+        source=source,
+        destination=destination
     )
+
+
+
 
 @app.route('/user_log', methods=['POST','GET'])
 def user_log():
