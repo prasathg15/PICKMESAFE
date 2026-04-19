@@ -250,85 +250,85 @@
 
     {% for row in pm_travel %}
 
-    <div class="modal fade" id="centermodal2{{ row.0 }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="centermodal2{{ row.0 }}" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+
           <div class="modal-header">
-            <h4 class="modal-title" id="myCenterModalLabel" align="center">Update</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <h4 class="modal-title">Update Location</h4>
+            <button type="button" class="close" data-dismiss="modal">X</button>
           </div>
+
           <div class="modal-body">
-            <form name="form1" method="post">
+            <form method="post" action="/location">
+
+              <!-- Latitude -->
               <div class="form-group">
-                <label for="exampleInputConfirmPassword1">Latitude</label>
-                <input type="text" name="latitude" class="form-control" id="exampleInputConfirmPassword1"
-                  placeholder="Latitude">
-                <input type="hidden" name="tid" value="{{ row.0 }}">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputConfirmPassword1">Longitude</label>
-                <input type="text" name="longitude" class="form-control" id="exampleInputConfirmPassword2"
-                  placeholder="Longitude">
+                <label>Latitude</label>
+                <input type="text" name="latitude" id="lat{{ row.0 }}" class="form-control" placeholder="Latitude">
               </div>
 
-              <button type="button" onClick="getLocation()" class="btn btn-link">Get Current Location</button>
+              <!-- Longitude -->
+              <div class="form-group">
+                <label>Longitude</label>
+                <input type="text" name="longitude" id="lng{{ row.0 }}" class="form-control" placeholder="Longitude">
+              </div>
 
-              <div class="col-lg-12 text-center" style="color:#0000FF">
-                <button type="submit" class="btn waves-effect waves-light btn-rounded btn-primary">Share</button>
+              <!-- Hidden ID -->
+              <input type="hidden" name="tid" value="{{ row.0 }}">
+
+              <!-- Get Location -->
+              <button type="button" onclick="getLocation('{{ row.0 }}')" class="btn btn-link">
+                Get Current Location
+              </button>
+
+              <!-- Submit -->
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Share</button>
               </div>
 
             </form>
           </div>
 
-
-
         </div>
       </div>
-
-
     </div>
-    <div>&nbsp;</div>
 
-  </div>
-  </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+    {% endfor %}
 
-  {% endfor %}
-
-  {% if st=="1" %}
+    {% if st=="1" %}
 
 
-  <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name={{name}}&mess={{mess}}&mobile={{mobile}}" width="10"
-    height="10"></iframe>
+    <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name={{name}}&mess={{mess}}&mobile={{mobile}}" width="10"
+      height="10"></iframe>
 
-  {% endif %}
+    {% endif %}
 
-  {% if tt=="2" %}
+    {% if tt=="2" %}
 
 
-  <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name={{name}}&mess={{mess1}}&mobile={{mobile}}" width="10"
-    height="10"></iframe>
+    <iframe src="http://iotcloud.co.in/testsms/sms.php?sms=emr&name={{name}}&mess={{mess1}}&mobile={{mobile}}"
+      width="10" height="10"></iframe>
 
-  {% endif %}
-  <script>
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      } else {
-        alert("Geolocation is not supported by this browser.");
+    {% endif %}
+    <script>
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
       }
-    }
 
-    function showPosition(position) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
+      function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
 
-      // Update the latitude and longitude input fields
-      document.getElementById("exampleInputConfirmPassword1").value = latitude;
-      document.getElementById("exampleInputConfirmPassword2").value = longitude;
-    }
-  </script>
+        // Update the latitude and longitude input fields
+        document.getElementById("exampleInputConfirmPassword1").value = latitude;
+        document.getElementById("exampleInputConfirmPassword2").value = longitude;
+      }
+    </script>
 
 
   </div>
@@ -360,6 +360,25 @@
   <!-- Custom js for this page-->
   <script src="../static/js/file-upload.js"></script>
 
+  <script>
+    function getLocation(id) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+
+          let lat = position.coords.latitude;
+          let lng = position.coords.longitude;
+
+          document.getElementById("lat" + id).value = lat;
+          document.getElementById("lng" + id).value = lng;
+
+        }, function (error) {
+          alert("Location access denied!");
+        });
+      } else {
+        alert("Geolocation not supported");
+      }
+    }
+  </script>
   <!-- End custom js for this page-->
 </body>
 

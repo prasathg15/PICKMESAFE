@@ -607,8 +607,7 @@ def view_status():
         user=dd[12]
         source=dd[20]
         destination=dd[21]
-        mess1 = f"Hi I'm {user}, Reach the {destination} from {source} safely."
-
+        mess1 = f"Hi I'm {user}, I safely reached {destination} from {source}."
         tt="2"
         cursor.close()
         
@@ -627,8 +626,7 @@ def view_status():
         name=bb[11]
         user=bb[12]
 
-        mess = f"Hi I'm {user},Emergency This is my location {latitude},{longitude}"
-
+        mess = f"Hi I'm {user}, Emergency! My location: https://www.google.com/maps?q={latitude},{longitude}"
         st="1"
         cursor.close()
 
@@ -641,23 +639,50 @@ def view_status():
 @app.route('/location', methods=['GET', 'POST'])
 def location():
     if 'username' not in session or session.get('user_type') != 'user':
-        print("Please log in as a admin to access the page.", 'danger')
         return redirect(url_for('user_log'))
 
+    if request.method == 'POST':
+        tid = request.form['tid']
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
 
-    if request.method=='POST':
-        tid=request.form['tid']
-        source=request.form['source']
-        destination=request.form['destination']
         cursor = mydb.cursor(buffered=True)
-        cursor.execute("update pm_travel set source=%s, destination=%s where id=%s",(source, destination, tid))
-        mydb.commit()
+
+        if latitude and longitude:
+            cursor.execute(
+                "UPDATE pm_travel SET latitude=%s, longitude=%s WHERE id=%s",
+                (latitude, longitude, tid)
+            )
+            mydb.commit()
+
+            # ✅ FETCH USER DETAILS FOR SMS
+            cursor.execute("SELECT * FROM pm_travel WHERE id=%s", (tid,))
+            data = cursor.fetchone()
+
+            mobile = data[10]
+            name = data[11]
+            user = data[12]
+
+            mess = f"Hi I'm {user}, Emergency! My location: https://www.google.com/maps?q={latitude},{longitude}"
+
+            # ✅ DIRECT SMS API CALL
+            import requests
+            url = "http://iotcloud.co.in/testsms/sms.php"
+            params = {
+                "sms": "emr",
+                "name": name,
+                "mess": mess,
+                "mobile": mobile
+            }
+
+            try:
+                requests.get(url, params=params)
+            except Exception as e:
+                print("SMS Error:", e)
+
         cursor.close()
 
-        
-
     return redirect(url_for('view_status'))
-
 
 
 @app.route('/report',methods=['POST','GET'])
