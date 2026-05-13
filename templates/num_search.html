@@ -76,7 +76,7 @@
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
-                    <img src="../static/images/faces/face5.jpg" alt="image">
+                    <img src="{{ url_for('static', filename='images/faces/face5.jpg') }}" alt="image">
                   </div>
 
                 </a>
@@ -102,11 +102,8 @@
           </ul>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
-              <a class="nav-link" href="#">
-                <img src="../static/images/faces/face5.jpg" alt="profile" />
-
-
-              </a>
+             <img src="{{ url_for('static', filename='images/faces/face5.jpg') }}"
+     alt="profile" />
 
             </li>
 
@@ -179,8 +176,9 @@
                 <div class="card-body">
                   <h4 align="center" class="card-title">Vehicle details</h4><br>
                   <div style="text-align: center;"> <!-- Center the content -->
-                    <img src="static/profile/{{ data[13] }}" class="rounded-circle img-fluid" alt="Owner Image"
-                      width="100" height="100"><br>
+                    <img src="{{ url_for('static', filename='images/faces/face5.jpg') }}"
+                      class="rounded-circle img-fluid" width="100" height="100">
+                    <br>
                   </div><br>
                   <div>&nbsp;</div>
                   <p class="card-description">
@@ -196,7 +194,9 @@
                           {{ data[2] }}
                         </p><br>
                         <p>
-                          <a href="static/proof/{{ data[14] }}" target="_blank">Click to view proof</a>
+                          <a href="{{ url_for('static', filename='proof/' + data[14]) }}" target="_blank">
+                            Click to view proof
+                          </a>
                         </p>
 
                       </address>
@@ -225,8 +225,9 @@
                   <p class="card-description">
                   </p>
                   <div style="text-align: center;">
-                    <img src="static/number/{{ data[12] }}" class="img-fluid" alt="Vehicle Image Image" width="200"
-                      height="250"><br>
+                    <img src="{{ url_for('static', filename='vehicle/' + data[12]) }}" class="img-fluid"
+                      alt="Vehicle Image" width="200" height="250">
+                    <br>
                   </div>
                 </div>
                 <form method="POST" action="/num_search">
@@ -273,7 +274,10 @@
                           {{ dat[4] }}
                         </p><br>
                         <p>
-                          <a href="static/driver/{{ dat[8] }}" target="_blank">Click to view proof</a>
+                          <a href="{{ url_for('static', filename='docs/' + dat[8]) }}"
+   target="_blank">
+   Click to view proof
+</a>
                         </p>
 
                       </address>
@@ -291,7 +295,7 @@
                   <p class="card-description">
                   </p>
                   <div style="text-align: center;">
-                    <img src="static/driver/{{ dat[8] }}" class="img-fluid" alt="Vehicle Image Image" width="200"
+                    <img src="{{ url_for('static', filename='docs/' + dat[8]) }}" class="img-fluid" width="200"
                       height="250"><br>
                   </div>
                   <div>&nbsp;</div>

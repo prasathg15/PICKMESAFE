@@ -61,76 +61,172 @@ def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'pdf'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/add_veh', methods=['GET','POST'])
+from flask import request, render_template
+from werkzeug.utils import secure_filename
+import datetime
+import os
+
+
+@app.route('/add_veh', methods=['GET', 'POST'])
 def add_veh():
 
-    msg=""
+    msg = ""
 
-    if request.method=='POST':
+    if request.method == 'POST':
 
-        veh_no=request.form.get('veh_no')
-        reg_mobile=request.form.get('reg_mobile')
-        reg_name=request.form.get('reg_name')
-        reg_address=request.form.get('reg_address')
-        veh_type=request.form.get('veh_type')
-        veh_name=request.form.get('veh_name')
-        veh_color=request.form.get('veh_color')
-        fuel_type=request.form.get('fuel_type')
-        chassis_no=request.form.get('chassis_no')
-        seats=request.form.get('seats')
-        username=request.form.get('username')
-        password=request.form.get('password')
+        veh_no = request.form.get('veh_no')
+        reg_mobile = request.form.get('reg_mobile')
+        reg_name = request.form.get('reg_name')
+        reg_address = request.form.get('reg_address')
+        veh_type = request.form.get('veh_type')
+        veh_name = request.form.get('veh_name')
+        veh_color = request.form.get('veh_color')
+        fuel_type = request.form.get('fuel_type')
+        chassis_no = request.form.get('chassis_no')
+        seats = request.form.get('seats')
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        now=datetime.datetime.now()
-        reg_join=now.strftime("%d-%m-%Y")
+        now = datetime.datetime.now()
+        reg_join = now.strftime("%d-%m-%Y")
 
-        filename=""
-        doc_filename=""
+        filename = ""
+        doc_filename = ""
 
-        # VEHICLE IMAGE
+        # =========================
+        # CREATE FOLDERS
+        # =========================
+
+        vehicle_folder = os.path.join(app.root_path, 'static', 'number')
+        docs_folder = os.path.join(app.root_path, 'static', 'proof')
+
+        os.makedirs(vehicle_folder, exist_ok=True)
+        os.makedirs(docs_folder, exist_ok=True)
+
+        # =========================
+        # VEHICLE IMAGE UPLOAD
+        # =========================
+
         if 'image' in request.files:
 
-            image=request.files['image']
+            image = request.files['image']
 
-            if image.filename!="":
+            if image.filename != "":
 
-                filename=secure_filename(image.filename)
-                image_path="D:/PickmeSafe/static/vehicle/"+filename
+                filename = secure_filename(image.filename)
+
+                image_path = os.path.join(vehicle_folder, filename)
+
                 image.save(image_path)
 
-        mycursor=mydb.cursor()
+        # =========================
+        # DOCUMENT UPLOAD
+        # =========================
 
-        mycursor.execute("SELECT count(*) FROM pm_vehicle WHERE veh_no=%s",(veh_no,))
-        cnt=mycursor.fetchone()[0]
+        doc_filenames = []
 
-        if cnt==0:
+        if 'pdf[]' in request.files:
+
+            pdf_files = request.files.getlist('pdf[]')
+
+            for pdf in pdf_files:
+
+                if pdf.filename != "":
+
+                    pdf_filename = secure_filename(pdf.filename)
+
+                    pdf_path = os.path.join(docs_folder, pdf_filename)
+
+                    pdf.save(pdf_path)
+
+                    doc_filenames.append(pdf_filename)
+
+        doc_filename = ",".join(doc_filenames)
+
+        # =========================
+        # DATABASE
+        # =========================
+
+        mycursor = mydb.cursor()
+
+        mycursor.execute(
+            "SELECT count(*) FROM pm_vehicle WHERE veh_no=%s",
+            (veh_no,)
+        )
+
+        cnt = mycursor.fetchone()[0]
+
+        # =========================
+        # CHECK VEHICLE EXISTS
+        # =========================
+
+        if cnt == 0:
 
             mycursor.execute("SELECT max(id)+1 FROM pm_vehicle")
-            maxid=mycursor.fetchone()[0]
+
+            maxid = mycursor.fetchone()[0]
 
             if maxid is None:
-                maxid=1
+                maxid = 1
 
-            sql="""INSERT INTO pm_vehicle
-            (id, veh_no, reg_mobile, reg_name, reg_address, veh_type, veh_name,
-            veh_color, fuel_type, chassis_no, seats, reg_join, image, images,
-            username, password)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+            sql = """
+            INSERT INTO pm_vehicle
+            (
+                id,
+                veh_no,
+                reg_mobile,
+                reg_name,
+                reg_address,
+                veh_type,
+                veh_name,
+                veh_color,
+                fuel_type,
+                chassis_no,
+                seats,
+                reg_join,
+                image,
+                images,
+                username,
+                password
+            )
+            VALUES
+            (
+                %s,%s,%s,%s,%s,%s,%s,%s,
+                %s,%s,%s,%s,%s,%s,%s,%s
+            )
+            """
 
-            val=(maxid,veh_no,reg_mobile,reg_name,reg_address,veh_type,
-                 veh_name,veh_color,fuel_type,chassis_no,seats,
-                 reg_join,filename,doc_filename,username,password)
+            val = (
+                maxid,
+                veh_no,
+                reg_mobile,
+                reg_name,
+                reg_address,
+                veh_type,
+                veh_name,
+                veh_color,
+                fuel_type,
+                chassis_no,
+                seats,
+                reg_join,
+                filename,
+                doc_filename,
+                username,
+                password
+            )
 
-            mycursor.execute(sql,val)
+            mycursor.execute(sql, val)
+
             mydb.commit()
 
-            msg="success"
+            msg = "Vehicle Registration Successful..."
 
         else:
-            msg="fail"
 
-    return render_template('add_veh.html',msg=msg)
+            msg = "Vehicle already registered!"
 
+    return render_template('add_veh.html', msg=msg)
+    
 @app.route('/num_search', methods=['GET', 'POST'])
 def num_search():
     if 'username' not in session or session.get('user_type') != 'user':
@@ -399,32 +495,47 @@ def get_otp():
         
     return render_template('get_otp.html', mess=mess, reg_mobile=reg_mobile, st=st, name=name, msg=msg)
 
+
+
+
 def generate_otp():
     return pyotp.TOTP(pyotp.random_base32()).now()
 
 
 @app.route('/owner_log', methods=['POST','GET'])
 def owner_log():
+
     msg = ""
+
     if request.method == 'POST':
+
         username = request.form['username']
         password = request.form['password']
 
-        # mydb = get_db_connection()  # create a new connection
         if not mydb.is_connected():
             mydb.reconnect()
 
-        cursor = mydb.cursor(buffered=True)        
-        cursor.execute('SELECT * FROM pm_vehicle WHERE username = %s AND password = %s', (username, password))
+        cursor = mydb.cursor(buffered=True)
+
+        cursor.execute(
+            'SELECT * FROM pm_vehicle WHERE username = %s AND password = %s',
+            (username, password)
+        )
+
         account = cursor.fetchone()
+
         cursor.close()
-        # mydb.close()
 
         if account:
-            session['username'] = username
+
+            session['username'] = account[14]
+            session['veh_no'] = account[1]
             session['user_type'] = 'owner'
+
             msg = "success"
+
         else:
+
             msg = "fail"
 
     return render_template('owner_log.html', msg=msg)
@@ -526,6 +637,10 @@ def add_driver():
                     msg = "fail"
 
     return render_template('add_driver.html', msg=msg, veh_no=veh_no)
+
+
+
+
 @app.route('/veh_details',methods=['POST','GET'])
 def veh_details():
     

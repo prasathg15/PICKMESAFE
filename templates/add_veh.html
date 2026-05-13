@@ -78,7 +78,7 @@
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
-                    <img src="../static/images/faces/face5.jpg" alt="image">
+                    <img src="{{ url_for('static', filename='images/faces/face5.jpg') }}" alt="image">
                   </div>
 
                 </a>
@@ -105,7 +105,7 @@
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link" href="#">
-                <img src="../static/images/faces/face5.jpg" alt="profile" />
+                <img src="{{ url_for('static', filename='images/faces/face5.jpg') }}" alt="profile" />
 
               </a>
 
@@ -181,13 +181,16 @@
                     <div class="col-md-12">
                       <div class="form-group row">
                         <div class="input-group col-xs-12">
-                          <input type="file" id="image" name="pdf[]" accept=".jpg, .png, .pdf"
-                            class="file-upload-default">
+                          <input type="file"
+       id="pdf"
+       name="pdf[]"
+       accept=".jpg,.png,.pdf"
+       multiple
+       class="file-upload-default">
                           <input type="text" class="form-control file-upload-info" disabled
                             placeholder="Upload license and Aadhaar card">
                           <div class="input-group-append">
-                            <label class="file-upload-browse btn btn-primary" for="image">Upload</label>
-                          </div>
+<label class="file-upload-browse btn btn-primary" for="pdf">Upload</label>                          </div>
                         </div>
                       </div>
                     </div>
@@ -256,13 +259,15 @@
                     <div class="col-md-12">
                       <div class="form-group row">
                         <div class="input-group col-xs-12">
-                          <input type="file" id="image" name="image" accept=".jpg, .png, .jpeg"
-                            class="file-upload-default">
+                        <input type="file"
+       id="vehicle_image"
+       name="image"
+       accept=".jpg,.png,.jpeg"
+       class="file-upload-default">
                           <input type="text" class="form-control file-upload-info" disabled
                             placeholder="Upload vehicle image">
                           <div class="input-group-append">
-                            <label class="file-upload-browse btn btn-primary" for="image">Upload</label>
-                          </div>
+<label class="file-upload-browse btn btn-primary" for="vehicle_image">Upload</label>                          </div>
                         </div>
                       </div>
                     </div>
