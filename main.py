@@ -604,38 +604,62 @@ def add_driver():
             profile = request.files['profile']
 
             if profile and allowed_file(profile.filename):
-                # Ensure the folder exists
-                profile_folder = 'D:/PickmeSafe/static/driver'
+
+                # Correct folder path
+                profile_folder = os.path.join(app.root_path, 'static', 'driver')
+
+                # Create folder if not exists
                 os.makedirs(profile_folder, exist_ok=True)
 
-                # Secure the filename
+                # Secure filename
                 filename = secure_filename(profile.filename)
+
+                # Full path
                 profile_path = os.path.join(profile_folder, filename)
 
-                # Save the file
+                # Save image
                 profile.save(profile_path)
 
+                print("Saved at:", profile_path)
+
                 mycursor = mydb.cursor(buffered=True)
-                mycursor.execute("SELECT count(*) FROM pm_driver WHERE username=%s", (username,))
+                mycursor.execute(
+                    "SELECT count(*) FROM pm_driver WHERE username=%s",
+                    (username,)
+                )
+
                 cnt = mycursor.fetchone()[0]
 
                 if cnt == 0:
+
                     mycursor.execute("SELECT max(id)+1 FROM pm_driver")
                     maxid = mycursor.fetchone()[0]
+
                     if maxid is None:
                         maxid = 1
 
                     sql = """INSERT INTO pm_driver(
-                                id, name, address, mobile, email, username, password, profile, date_join, veh_no, owner_username
-                             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-                    val = (maxid, name, address, mobile, email, username, password, filename, date_join, veh_no, owner_username)
+                                id, name, address, mobile, email,
+                                username, password, profile,
+                                date_join, veh_no, owner_username
+                            )
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+
+                    val = (
+                        maxid, name, address, mobile, email,
+                        username, password, filename,
+                        date_join, veh_no, owner_username
+                    )
 
                     mycursor.execute(sql, val)
                     mydb.commit()
+
                     msg = "success"
+
                 else:
                     msg = "fail"
-
+            
+    
     return render_template('add_driver.html', msg=msg, veh_no=veh_no)
 
 
